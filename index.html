@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RepRun</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell" aria-label="RepRun home">
+      <section class="phone-screen">
+        <section class="screen active animate-in" data-screen="home">
+          <div class="home-content">
+            <div class="logo-mark">
+              <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+                <circle cx="36" cy="36" r="34" stroke="#c0c0c0" stroke-width="2"/>
+                <rect x="30" y="20" width="12" height="32" rx="3" fill="#c0c0c0"/>
+                <rect x="18" y="28" width="8" height="16" rx="4" fill="#c0c0c0"/>
+                <rect x="46" y="28" width="8" height="16" rx="4" fill="#c0c0c0"/>
+                <rect x="12" y="31" width="8" height="10" rx="3" fill="#c0c0c0"/>
+                <rect x="52" y="31" width="8" height="10" rx="3" fill="#c0c0c0"/>
+              </svg>
+            </div>
+            <h1 class="welcome-title">Welcome to<br>Rep Run</h1>
+            <p class="welcome-sub">Your daily workout companion</p>
+            <button class="start-btn" type="button" data-action="start">Get Started</button>
+          </div>
+        </section>
+
+        <header class="top-bar" id="topBar" hidden>
+          <div>
+            <p class="eyebrow" id="todayLabel">Today</p>
+            <h1>RepRun</h1>
+          </div>
+          <button class="profile-button" type="button" aria-label="Profile" data-action="profile">RR</button>
+        </header>
+
+        <div class="screen-stack">
+          <section class="screen" data-screen="today">
+            <div class="scroll-area">
+              <section class="hero">
+                <p class="status" id="heroStatus">Workout ready</p>
+                <h2 id="heroTitle">Back + Biceps</h2>
+                <p class="summary">Today's workout is loaded. Check off each exercise as you go.</p>
+              </section>
+
+              <section class="progress-panel" aria-label="Workout progress">
+                <div class="progress-copy">
+                  <span>Today's exercises</span>
+                  <strong id="progressText">0 / 4 done</strong>
+                </div>
+                <div class="progress-track" aria-hidden="true">
+                  <div class="progress-fill" id="progressFill"></div>
+                </div>
+              </section>
+
+              <section class="exercise-card" id="exerciseCard">
+                <div class="set-list" id="todayContent"></div>
+              </section>
+            </div>
+
+            <button class="progress-btn" type="button" data-action="progress" aria-label="Progress to next exercise">Go</button>
+          </section>
+
+          <section class="screen" data-screen="schedule">
+            <h2>Schedule</h2>
+            <div id="scheduleContent"></div>
+          </section>
+
+          <section class="screen" data-screen="progress">
+            <h2>Progress</h2>
+            <p class="summary">No completed workouts yet. Tick off today's sets to start the log.</p>
+          </section>
+
+          <section class="screen" data-screen="settings">
+            <h2>Settings</h2>
+            <p class="summary">Your weekly workout schedule will live here.</p>
+          </section>
+        </div>
+
+        <nav class="tab-bar" id="tabBar" aria-label="Main navigation" hidden>
+          <button type="button" data-tab="home" aria-label="Home">Home</button>
+          <button class="active" type="button" aria-current="page" data-tab="today">Today</button>
+          <button type="button" data-tab="schedule">Schedule</button>
+          <button type="button" data-tab="progress">Progress</button>
+          <button type="button" data-tab="settings">Settings</button>
+        </nav>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
