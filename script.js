@@ -220,6 +220,12 @@ function loadTodaySets() {
     entry.sets.forEach((checked, i) => {
       if (boxes[i]) boxes[i].checked = checked;
     });
+    if (entry.completed) {
+      showWorkoutComplete();
+      progressBtn.classList.add("finished");
+      progressBtn.textContent = "Done";
+      progressBtn.ariaLabel = "Workout complete";
+    }
   }
 }
 
@@ -379,6 +385,9 @@ const progressText = document.querySelector("#progressText");
 const progressFill = document.querySelector("#progressFill");
 const exerciseBadge = document.querySelector("#exerciseBadge");
 const progressBtn = document.querySelector('[data-action="progress"]');
+const workoutComplete = document.querySelector("#workoutComplete");
+const goBackBtn = document.querySelector("#goBackBtn");
+const exerciseCard = document.querySelector("#exerciseCard");
 
 function updateProgress() {
   const boxes = setCheckboxes();
@@ -447,8 +456,7 @@ progressBtn.addEventListener("click", () => {
     data[dateKey].completed = true;
     data[dateKey].sets = [...setCheckboxes()].map((cb) => cb.checked);
     saveHistory(data);
-    setCheckboxes().forEach((cb) => { cb.checked = false; });
-    updateProgress();
+    showWorkoutComplete();
     renderSchedule();
     return;
   }
@@ -458,3 +466,23 @@ progressBtn.addEventListener("click", () => {
     updateProgress();
   }
 });
+
+goBackBtn.addEventListener("click", () => {
+  showWorkoutActive();
+  setCheckboxes().forEach((cb) => { cb.checked = false; });
+  updateProgress();
+});
+
+function showWorkoutComplete() {
+  exerciseCard.hidden = true;
+  progressBtn.hidden = true;
+  workoutComplete.hidden = false;
+  goBackBtn.hidden = false;
+}
+
+function showWorkoutActive() {
+  exerciseCard.hidden = false;
+  progressBtn.hidden = false;
+  workoutComplete.hidden = true;
+  goBackBtn.hidden = true;
+}

@@ -71,9 +71,16 @@
               <section class="exercise-card" id="exerciseCard">
                 <div class="set-list" id="todayContent"></div>
               </section>
+
+              <section class="workout-complete" id="workoutComplete" hidden>
+                <div class="complete-icon">✓</div>
+                <h2>Workout Completed</h2>
+                <p class="summary">Great work! You've finished today's session.</p>
+              </section>
             </div>
 
             <button class="progress-btn" type="button" data-action="progress" aria-label="Progress to next exercise">Go</button>
+            <button class="go-back-btn" type="button" id="goBackBtn" hidden>Go back</button>
           </section>
 
           <section class="screen" data-screen="schedule">
