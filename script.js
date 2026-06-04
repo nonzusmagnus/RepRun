@@ -321,13 +321,14 @@ function renderSchedule() {
     const weekEntry = weekDates.find((wd) => wd.dayKey === key);
     const dayEntry = weekEntry ? history[weekEntry.dateKey] : null;
     const isDone = dayEntry && dayEntry.completed;
+    const dateKey = weekEntry ? weekEntry.dateKey : "";
     html += `
       <details class="day-card ${isDone ? "done" : ""}" ${isToday ? "open" : ""}>
         <summary class="day-summary">
-          <span class="day-name">
-            ${capitalized}
-            ${isDone ? '<span class="done-badge" aria-label="Completed">✓</span>' : ""}
-          </span>
+          <span class="day-name">${capitalized}</span>
+          <button type="button" class="day-toggle" data-datekey="${dateKey}" data-done="${isDone}" aria-label="${isDone ? "Mark incomplete" : "Mark complete"}">
+            ${isDone ? "✓" : "○"}
+          </button>
           <span class="day-workout">${w.name}</span>
         </summary>
         <div class="day-exercises">
@@ -429,6 +430,23 @@ document.addEventListener("change", (e) => {
     updateProgress();
     saveTodaySets();
   }
+});
+
+document.addEventListener("click", (e) => {
+  const toggle = e.target.closest(".day-toggle");
+  if (!toggle) return;
+  const dateKey = toggle.dataset.datekey;
+  if (!dateKey) return;
+  const data = loadHistory();
+  const wasDone = toggle.dataset.done === "true";
+  if (wasDone) {
+    if (data[dateKey]) data[dateKey].completed = false;
+  } else {
+    if (!data[dateKey]) data[dateKey] = { dayKey: "", completed: false, sets: [] };
+    data[dateKey].completed = true;
+  }
+  saveHistory(data);
+  renderSchedule();
 });
 
 const themeToggle = document.querySelector("#themeToggle");
