@@ -284,8 +284,8 @@ function updateProgress() {
 
   const allDone = total > 0 && done === total;
   progressBtn.classList.toggle("finished", allDone);
-  progressBtn.textContent = allDone ? "Finish" : "Go";
-  progressBtn.ariaLabel = allDone ? "Finish workout" : "Progress to next exercise";
+  progressBtn.textContent = allDone ? "Done" : "Go";
+  progressBtn.ariaLabel = allDone ? "Workout complete" : "Progress to next exercise";
 }
 
 startBtn.addEventListener("click", () => {
