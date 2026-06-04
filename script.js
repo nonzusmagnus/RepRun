@@ -306,10 +306,12 @@ document.addEventListener("change", (e) => {
 });
 
 const themeToggle = document.querySelector("#themeToggle");
+const themeLabel = document.querySelector("#themeLabel");
 
 function applyTheme(isDark) {
   document.documentElement.classList.toggle("light-mode", !isDark);
   if (themeToggle) themeToggle.checked = isDark;
+  if (themeLabel) themeLabel.textContent = isDark ? "Dark Mode" : "Light Mode";
   localStorage.setItem("rep-run-dark", isDark);
 }
 
@@ -318,9 +320,7 @@ themeToggle?.addEventListener("change", () => {
 });
 
 const savedDark = localStorage.getItem("rep-run-dark");
-if (savedDark !== null) {
-  applyTheme(savedDark === "true");
-}
+applyTheme(savedDark !== "false");
 
 const progressBtn = document.querySelector('[data-action="progress"]');
 progressBtn.addEventListener("click", () => {
