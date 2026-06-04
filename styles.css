@@ -216,7 +216,7 @@ body {
   gap: 16px;
   overflow-y: auto;
   min-height: 0;
-  padding-bottom: 8px;
+  padding: 12px 0 8px;
 }
 
 .top-bar {
@@ -350,6 +350,12 @@ p {
 .animate-in[data-screen="schedule"] .day-card:nth-child(6) { animation-delay: 0.2s; }
 .animate-in[data-screen="schedule"] .day-card:nth-child(7) { animation-delay: 0.24s; }
 .animate-in[data-screen="schedule"] .day-card:nth-child(8) { animation-delay: 0.28s; }
+
+.screen[data-screen="schedule"] h2,
+.screen[data-screen="progress"] h2,
+.screen[data-screen="settings"] h2 {
+  padding-top: 4px;
+}
 
 /* Progress screen */
 .animate-in[data-screen="progress"] h2 {
