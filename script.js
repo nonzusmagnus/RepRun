@@ -71,7 +71,7 @@ const workouts = {
     ],
   },
   thursday: {
-    name: "Shoulders + Triceps",
+    name: "Shoulders + Abs",
     groups: [
       {
         name: "Shoulders",
@@ -83,7 +83,7 @@ const workouts = {
         ],
       },
       {
-        name: "Triceps",
+        name: "Abs",
         exercises: [
           { name: "Hanging Leg Raises", sets: "4x10-15/side" },
           { name: "Weighted Plank", sets: "3x30-45s" },
