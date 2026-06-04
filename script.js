@@ -35,7 +35,7 @@ const workouts = {
       {
         name: "Triceps",
         exercises: [
-          { name: "Close-Grip Push-Ups", sets: "3x10-15" },
+          { name: "Barbell Tricep Extensions", sets: "3x10-15" },
           { name: "Overhead Triceps Extension", sets: "3x10-15" },
           { name: "Rope Pushdowns", sets: "3x12-15" },
         ],
