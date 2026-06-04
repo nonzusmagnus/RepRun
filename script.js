@@ -305,6 +305,23 @@ document.addEventListener("change", (e) => {
   if (e.target.matches("[data-set]")) updateProgress();
 });
 
+const themeToggle = document.querySelector("#themeToggle");
+
+function applyTheme(isDark) {
+  document.documentElement.classList.toggle("light-mode", !isDark);
+  if (themeToggle) themeToggle.checked = isDark;
+  localStorage.setItem("rep-run-dark", isDark);
+}
+
+themeToggle?.addEventListener("change", () => {
+  applyTheme(themeToggle.checked);
+});
+
+const savedDark = localStorage.getItem("rep-run-dark");
+if (savedDark !== null) {
+  applyTheme(savedDark === "true");
+}
+
 const progressBtn = document.querySelector('[data-action="progress"]');
 progressBtn.addEventListener("click", () => {
   const unchecked = [...setCheckboxes()].find((cb) => !cb.checked);

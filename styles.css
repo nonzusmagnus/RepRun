@@ -5,6 +5,39 @@
   --line: #1e1e1e;
   --surface: #0a0a0a;
   --page: #000;
+  --card: #0d0d0d;
+  --card-open: #0f0f0f;
+  --track: #1a1a1a;
+  --pill: #1a1a1a;
+  --tab-bg: #111;
+  --btn-ink: #000;
+  --home-start: #000;
+  --home-end: #111;
+  --hover-overlay: rgba(192, 192, 192, 0.06);
+  --active-overlay: rgba(192, 192, 192, 0.05);
+  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow-dark: rgba(0, 0, 0, 0.4);
+}
+
+.light-mode {
+  --accent: #333;
+  --ink: #111;
+  --muted: #666;
+  --line: #e0e0e0;
+  --surface: #f5f5f5;
+  --page: #fff;
+  --card: #fff;
+  --card-open: #fafafa;
+  --track: #e0e0e0;
+  --pill: #eee;
+  --tab-bg: #e8e8e8;
+  --btn-ink: #fff;
+  --home-start: #fff;
+  --home-end: #f0f0f0;
+  --hover-overlay: rgba(0, 0, 0, 0.04);
+  --active-overlay: rgba(0, 0, 0, 0.03);
+  --shadow: rgba(0, 0, 0, 0.08);
+  --shadow-dark: rgba(0, 0, 0, 0.12);
 }
 
 * {
@@ -18,6 +51,7 @@ body {
   color: var(--ink);
   background: var(--page);
   -webkit-font-smoothing: antialiased;
+  transition: background 200ms ease, color 200ms ease;
 }
 
 .app-shell {
@@ -38,6 +72,7 @@ body {
   border: 1px solid var(--line);
   border-radius: 36px;
   position: relative;
+  transition: background 200ms ease, border-color 200ms ease;
 }
 
 .screen-stack {
@@ -61,8 +96,9 @@ body {
   inset: 0;
   display: none;
   z-index: 10;
-  background: linear-gradient(180deg, #000000 0%, #111111 100%);
+  background: linear-gradient(180deg, var(--home-start) 0%, var(--home-end) 100%);
   border-radius: 36px;
+  transition: background 200ms ease;
 }
 
 .screen[data-screen="home"].active {
@@ -92,6 +128,19 @@ body {
   height: 100%;
 }
 
+.logo-mark svg circle,
+.logo-mark svg rect {
+  transition: stroke 200ms ease, fill 200ms ease;
+}
+
+.light-mode .logo-mark svg circle {
+  stroke: #333;
+}
+
+.light-mode .logo-mark svg rect {
+  fill: #333;
+}
+
 .welcome-title {
   margin: 0;
   font-size: 34px;
@@ -116,22 +165,31 @@ body {
   padding: 16px;
   border: 1px solid var(--line);
   border-radius: 16px;
-  color: #000;
+  color: var(--btn-ink);
   background: var(--accent);
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+  transition: background 150ms ease, box-shadow 150ms ease, transform 150ms ease, color 200ms ease;
 }
 
 .start-btn:hover {
   background: #d4d4d4;
 }
 
+.light-mode .start-btn:hover {
+  background: #555;
+}
+
 .start-btn:active {
   background: #a3a3a3;
   box-shadow: 0 0 0 3px rgba(192, 192, 192, 0.3);
   transform: scale(0.97);
+}
+
+.light-mode .start-btn:active {
+  background: #666;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
 }
 
 /* Home screen animations */
@@ -207,16 +265,20 @@ p {
   height: 40px;
   border: 0;
   border-radius: 50%;
-  color: #000;
+  color: var(--btn-ink);
   background: var(--accent);
   font-weight: 600;
   font-size: 13px;
   cursor: pointer;
-  transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease, color 200ms ease, background 200ms ease;
 }
 
 .profile-button:active {
   box-shadow: 0 0 0 3px rgba(192, 192, 192, 0.35);
+}
+
+.light-mode .profile-button:active {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
 }
 
 .screen {
@@ -303,7 +365,7 @@ p {
   animation: fadeSlideUp 0.4s ease both;
 }
 
-.animate-in[data-screen="settings"] .summary {
+.animate-in[data-screen="settings"] .settings-group {
   animation: fadeSlideUp 0.4s ease 0.1s both;
 }
 
@@ -385,7 +447,8 @@ p {
   height: 4px;
   overflow: hidden;
   border-radius: 999px;
-  background: #1a1a1a;
+  background: var(--track);
+  transition: background 200ms ease;
 }
 
 .progress-fill {
@@ -393,7 +456,7 @@ p {
   height: 100%;
   border-radius: inherit;
   background: var(--accent);
-  transition: width 200ms ease;
+  transition: width 200ms ease, background 200ms ease;
 }
 
 /* ========== EXERCISE CARD ========== */
@@ -407,7 +470,8 @@ p {
   border: 1px solid var(--line);
   border-radius: 14px;
   overflow: hidden;
-  background: #0d0d0d;
+  background: var(--card);
+  transition: background 200ms ease, border-color 200ms ease;
 }
 
 .muscle-group + .muscle-group {
@@ -415,7 +479,7 @@ p {
 }
 
 .muscle-group[open] {
-  background: #0f0f0f;
+  background: var(--card-open);
 }
 
 .muscle-heading {
@@ -435,7 +499,7 @@ p {
 }
 
 .muscle-heading:active {
-  background: rgba(192, 192, 192, 0.06);
+  background: var(--hover-overlay);
 }
 
 .muscle-heading::-webkit-details-marker {
@@ -468,7 +532,7 @@ p {
 }
 
 .set-row:active {
-  background: rgba(192, 192, 192, 0.05);
+  background: var(--active-overlay);
 }
 
 .set-row:last-child {
@@ -487,10 +551,11 @@ p {
   font-size: 12px;
   color: var(--muted);
   white-space: nowrap;
-  background: #1a1a1a;
+  background: var(--pill);
   padding: 3px 8px;
   border-radius: 6px;
   font-weight: 500;
+  transition: background 200ms ease;
 }
 
 .set-row input {
@@ -523,12 +588,12 @@ p {
   font-weight: 600;
   cursor: pointer;
   transition: transform 150ms ease, box-shadow 150ms ease;
-  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.35), 0 8px 24px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.35), 0 8px 24px var(--shadow);
 }
 
 .progress-btn:hover {
   transform: scale(1.06);
-  box-shadow: 0 6px 28px rgba(239, 68, 68, 0.5), 0 10px 28px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 28px rgba(239, 68, 68, 0.5), 0 10px 28px var(--shadow-dark);
 }
 
 .progress-btn:active {
@@ -549,10 +614,12 @@ p {
   margin-bottom: 8px;
   background: none;
   overflow: hidden;
+  transition: border-color 200ms ease;
 }
 
 .day-card[open] {
-  background: #0d0d0d;
+  background: var(--card);
+  transition: background 200ms ease;
 }
 
 .day-summary {
@@ -567,7 +634,7 @@ p {
 }
 
 .day-summary:active {
-  background: rgba(192, 192, 192, 0.06);
+  background: var(--hover-overlay);
 }
 
 .day-summary::-webkit-details-marker {
@@ -587,7 +654,6 @@ p {
 .day-name {
   font-weight: 600;
   font-size: 14px;
-  min-width: 70px;
 }
 
 .day-workout {
@@ -624,6 +690,82 @@ p {
   font-size: 13px;
 }
 
+/* ========== SETTINGS ========== */
+
+.screen[data-screen="settings"] {
+  overflow-y: auto;
+}
+
+.settings-group {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--card);
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* Toggle switch */
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-track {
+  position: relative;
+  width: 46px;
+  height: 26px;
+  border-radius: 13px;
+  background: var(--pill);
+  transition: background 200ms ease;
+  flex-shrink: 0;
+}
+
+.toggle input:checked + .toggle-track {
+  background: var(--accent);
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--ink);
+  transition: transform 200ms ease, background 200ms ease;
+}
+
+.toggle input:checked + .toggle-track .toggle-thumb {
+  transform: translateX(20px);
+}
+
+.toggle-label {
+  font-size: 13px;
+  color: var(--muted);
+  min-width: 70px;
+}
+
 /* ========== TAB BAR ========== */
 
 .tab-bar {
@@ -634,7 +776,8 @@ p {
   padding: 6px;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: #111;
+  background: var(--tab-bg);
+  transition: background 200ms ease, border-color 200ms ease;
 }
 
 .tab-bar button {
@@ -655,9 +798,14 @@ p {
   box-shadow: inset 0 0 0 1px rgba(192, 192, 192, 0.2);
 }
 
+.light-mode .tab-bar button:active {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
 .tab-bar button.active {
-  color: #000;
+  color: var(--btn-ink);
   background: var(--accent);
+  transition: color 200ms ease, background 200ms ease;
 }
 
 /* ========== RESPONSIVE ========== */
