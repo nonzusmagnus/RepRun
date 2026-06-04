@@ -271,6 +271,7 @@ const setCheckboxes = () => document.querySelectorAll("[data-set]");
 const progressText = document.querySelector("#progressText");
 const progressFill = document.querySelector("#progressFill");
 const exerciseBadge = document.querySelector("#exerciseBadge");
+const progressBtn = document.querySelector('[data-action="progress"]');
 
 function updateProgress() {
   const boxes = setCheckboxes();
@@ -280,6 +281,11 @@ function updateProgress() {
   if (progressText) progressText.textContent = label;
   if (exerciseBadge) exerciseBadge.textContent = label;
   if (progressFill) progressFill.style.width = total > 0 ? `${(done / total) * 100}%` : "0%";
+
+  const allDone = total > 0 && done === total;
+  progressBtn.classList.toggle("finished", allDone);
+  progressBtn.textContent = allDone ? "Finish" : "Go";
+  progressBtn.ariaLabel = allDone ? "Finish workout" : "Progress to next exercise";
 }
 
 startBtn.addEventListener("click", () => {
@@ -322,8 +328,12 @@ themeToggle?.addEventListener("change", () => {
 const savedDark = localStorage.getItem("rep-run-dark");
 applyTheme(savedDark !== "false");
 
-const progressBtn = document.querySelector('[data-action="progress"]');
 progressBtn.addEventListener("click", () => {
+  if (progressBtn.classList.contains("finished")) {
+    setCheckboxes().forEach((cb) => { cb.checked = false; });
+    updateProgress();
+    return;
+  }
   const unchecked = [...setCheckboxes()].find((cb) => !cb.checked);
   if (unchecked) {
     unchecked.checked = true;
