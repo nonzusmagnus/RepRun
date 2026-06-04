@@ -170,6 +170,71 @@ if (todayLabel) {
   }).format(now);
 }
 
+const STORAGE_KEY = "rep-run-history";
+
+function getDateKey(date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function loadHistory() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  } catch {
+    return {};
+  }
+}
+
+function saveHistory(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function purgeOld() {
+  const data = loadHistory();
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 30);
+  const cutoffStr = getDateKey(cutoff);
+  let changed = false;
+  Object.keys(data).forEach((key) => {
+    if (key < cutoffStr) {
+      delete data[key];
+      changed = true;
+    }
+  });
+  if (changed) saveHistory(data);
+}
+
+function saveTodaySets() {
+  const dateKey = getDateKey(now);
+  const data = loadHistory();
+  if (!data[dateKey]) data[dateKey] = { dayKey: todayKey, completed: false, sets: [] };
+  data[dateKey].sets = [...setCheckboxes()].map((cb) => cb.checked);
+  saveHistory(data);
+}
+
+function loadTodaySets() {
+  const dateKey = getDateKey(now);
+  const data = loadHistory();
+  const entry = data[dateKey];
+  if (entry && entry.sets) {
+    const boxes = setCheckboxes();
+    entry.sets.forEach((checked, i) => {
+      if (boxes[i]) boxes[i].checked = checked;
+    });
+  }
+}
+
+function getWeekDates() {
+  const week = [];
+  const sunday = new Date(now);
+  sunday.setDate(sunday.getDate() - now.getDay());
+  dayKeys.forEach((key, i) => {
+    const d = new Date(sunday);
+    d.setDate(sunday.getDate() + i);
+    week.push({ dayKey: key, date: d, dateKey: getDateKey(d) });
+  });
+  return week;
+}
+
 function showHome() {
   const home = document.querySelector('[data-screen="home"]');
   home.classList.add("active");
@@ -196,6 +261,7 @@ function showScreen(screenName) {
 
   topBar.hidden = false;
   updateTabHighlight(screenName);
+  if (screenName === "progress") renderProgress();
 }
 
 function updateTabHighlight(screenName) {
@@ -233,20 +299,29 @@ function renderToday() {
     html += `</div></details>`;
   });
   todayContent.innerHTML = html;
+  loadTodaySets();
   updateProgress();
 }
 
 function renderSchedule() {
   if (!scheduleContent) return;
+  const weekDates = getWeekDates();
+  const history = loadHistory();
   let html = "";
   dayKeys.forEach((key) => {
     const w = workouts[key];
     const capitalized = key.charAt(0).toUpperCase() + key.slice(1);
     const isToday = key === todayKey;
+    const weekEntry = weekDates.find((wd) => wd.dayKey === key);
+    const dayEntry = weekEntry ? history[weekEntry.dateKey] : null;
+    const isDone = dayEntry && dayEntry.completed;
     html += `
-      <details class="day-card" ${isToday ? "open" : ""}>
+      <details class="day-card ${isDone ? "done" : ""}" ${isToday ? "open" : ""}>
         <summary class="day-summary">
-          <span class="day-name">${capitalized}</span>
+          <span class="day-name">
+            ${capitalized}
+            ${isDone ? '<span class="done-badge" aria-label="Completed">✓</span>' : ""}
+          </span>
           <span class="day-workout">${w.name}</span>
         </summary>
         <div class="day-exercises">
@@ -265,6 +340,38 @@ function renderSchedule() {
       </details>`;
   });
   scheduleContent.innerHTML = html;
+  renderProgress();
+}
+
+function renderProgress() {
+  const el = document.querySelector("#progressSummary");
+  if (!el) return;
+  const history = loadHistory();
+  const weekDates = getWeekDates();
+  let weekDone = 0;
+  let totalDone = 0;
+  const totalDays = Object.keys(history).length;
+  weekDates.forEach((wd) => {
+    if (history[wd.dateKey]?.completed) weekDone++;
+  });
+  Object.values(history).forEach((entry) => {
+    if (entry.completed) totalDone++;
+  });
+  el.innerHTML = `
+    <div class="stats-card">
+      <div class="stat">
+        <span class="stat-value">${weekDone}</span>
+        <span class="stat-label">This week</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">${totalDone}</span>
+        <span class="stat-label">Total done</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">${totalDays}</span>
+        <span class="stat-label">Days logged</span>
+      </div>
+    </div>`;
 }
 
 const setCheckboxes = () => document.querySelectorAll("[data-set]");
@@ -304,11 +411,15 @@ profileButton.addEventListener("click", () => {
   showScreen("settings");
 });
 
+purgeOld();
 renderToday();
 renderSchedule();
 
 document.addEventListener("change", (e) => {
-  if (e.target.matches("[data-set]")) updateProgress();
+  if (e.target.matches("[data-set]")) {
+    updateProgress();
+    saveTodaySets();
+  }
 });
 
 const themeToggle = document.querySelector("#themeToggle");
@@ -330,8 +441,15 @@ applyTheme(savedDark !== "false");
 
 progressBtn.addEventListener("click", () => {
   if (progressBtn.classList.contains("finished")) {
+    const dateKey = getDateKey(now);
+    const data = loadHistory();
+    if (!data[dateKey]) data[dateKey] = { dayKey: todayKey, completed: false, sets: [] };
+    data[dateKey].completed = true;
+    data[dateKey].sets = [...setCheckboxes()].map((cb) => cb.checked);
+    saveHistory(data);
     setCheckboxes().forEach((cb) => { cb.checked = false; });
     updateProgress();
+    renderSchedule();
     return;
   }
   const unchecked = [...setCheckboxes()].find((cb) => !cb.checked);
@@ -340,5 +458,3 @@ progressBtn.addEventListener("click", () => {
     updateProgress();
   }
 });
-
-
