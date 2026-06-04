@@ -325,10 +325,12 @@ function renderSchedule() {
     html += `
       <details class="day-card ${isDone ? "done" : ""}" ${isToday ? "open" : ""}>
         <summary class="day-summary">
-          <span class="day-name">${capitalized}</span>
-          <button type="button" class="day-toggle" data-datekey="${dateKey}" data-done="${isDone}" aria-label="${isDone ? "Mark incomplete" : "Mark complete"}">
-            ${isDone ? "✓" : "○"}
-          </button>
+          <span class="day-name-group">
+            <span class="day-name">${capitalized}</span>
+            <button type="button" class="day-toggle" data-datekey="${dateKey}" data-done="${isDone}" aria-label="${isDone ? "Mark incomplete" : "Mark complete"}">
+              ${isDone ? "✓" : "○"}
+            </button>
+          </span>
           <span class="day-workout">${w.name}</span>
         </summary>
         <div class="day-exercises">
